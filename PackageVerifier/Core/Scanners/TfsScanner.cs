@@ -47,9 +47,9 @@ namespace PackageVerifier.Core.Scanners
 
                     foreach (Item item in items.Items)
                     {
-                        //System.Console.WriteLine(item.ServerItem);
-                        //if (!item.ServerItem.Contains("Prod") || item.ServerItem.Contains("HF") || item.ServerItem.Contains("BF"))
-                        //    continue;
+                        if (!this.IsAllowed(item.ServerItem))
+                            continue;
+
                         var stream = item.DownloadFile();
                         var packages = await this.ParseConfig(stream).ConfigureAwait(false);
 

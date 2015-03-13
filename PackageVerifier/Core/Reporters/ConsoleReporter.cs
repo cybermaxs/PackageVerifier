@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PackageVerifier.Utils;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,35 +9,48 @@ namespace PackageVerifier.Core.Reporters
     {
         private readonly IAnalytics analytics;
         private readonly Settings settings;
+        private readonly INugetService nugetService;
 
-        public ConsoleReporter(IAnalytics analytics, Settings settings)
+        public ConsoleReporter(IAnalytics analytics, Settings settings, INugetService nugetService)
         {
             this.analytics = analytics;
             this.settings = settings;
+            this.nugetService = nugetService;
+        }
+
+        private string Indent(int count)
+        {
+            return string.Empty.PadLeft(count);
         }
 
         public Task GenerateAsync()
         {
-            Console.WriteLine("Found {0} packages.config in {1}:{2}", this.analytics.GetAllPaths().Count, settings.Source, settings.Home);
-
-            if (!string.IsNullOrEmpty(settings.Package))
+            var pkg = this.nugetService.GetPackageInfos(settings.PackageID);
+            if (pkg == null)
             {
-                Console.WriteLine("Found {0} version for {1}", this.analytics.GetAllVersions(settings.Package).Count, settings.Package);
-                foreach (var stats in this.analytics.GetStatsFor(settings.Package))
-                {
-                    Console.WriteLine("=>Version {0}", stats.Key);
-                    foreach (var path in stats.Value)
-                    {
-                        Console.WriteLine("- {0}", path);
-                    }
-                }
+                Console.WriteLine("The package '{0}' could not be found on the official nuget repository", settings.PackageID);
             }
             else
             {
-                foreach (var pkg in this.analytics.GetAllPackagesIds())
+                Console.WriteLine();
+                Console.WriteLine("**************************************");
+                Console.WriteLine("{0} - Last Version {1}", pkg.Id, pkg.Version);
+                Console.WriteLine("Summary : {0}", pkg.Summary);
+                Console.WriteLine("**************************************");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Scanned {0} packages.config at {1}=>{2}", this.analytics.GetAllPaths().Count, settings.Source, settings.Home);
+
+            Console.WriteLine("Found {0} versions of '{1}'", this.analytics.GetAllVersions(settings.PackageID).Count, settings.PackageID);
+            foreach (var stats in this.analytics.GetStatsFor(settings.PackageID))
+            {
+                Console.WriteLine();
+                Console.WriteLine(Indent(3)+@"=>Version {0}", stats.Key);
+                foreach (var path in stats.Value)
                 {
-                    Console.WriteLine("Found {0} version for {1}", this.analytics.GetAllVersions(pkg).Count, pkg);
-                }
+                    Console.WriteLine(Indent(6) + @"{0}", path);
+                } 
             }
 
             return Task.FromResult<object>(null);

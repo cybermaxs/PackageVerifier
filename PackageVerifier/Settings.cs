@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using System.Linq;
 using CommandLine.Text;
 
 namespace PackageVerifier
@@ -11,16 +12,16 @@ namespace PackageVerifier
         [Option('f', "filter", Required = false, DefaultValue = "", HelpText = "Regex filter")]
         public string Filter { get; set; }
 
-        [Option('h', "Home", Required = false, DefaultValue = "", HelpText = "Root path")]
+        [Option('h', "Home", Required = true, DefaultValue = "", HelpText = "Root path")]
         public string Home { get; set; }
 
-        [Option('p', "package", Required = false, DefaultValue = "", HelpText = "Package Name")]
-        public string Package { get; set; }
+        [Option('p', "packageID", Required = true, DefaultValue = "", HelpText = "Package Id")]
+        public string PackageID { get; set; }
 
-        [Option('r', "reporter", Required = false, DefaultValue = "Console", HelpText = "Reporter Type : console|html")]
+        [Option('r', "reporter", Required = false, DefaultValue = "console", HelpText = "Reporter Type : console|html")]
         public string Reporters { get; set; }
 
-        [Option('s', "source", Required = false, DefaultValue = "file", HelpText = "Source Type : file|tfs")]
+        [Option('s', "source", Required = true, DefaultValue = "file", HelpText = "Source Type : file|tfs")]
         public string Source { get; set; }
 
         [ParserState]
@@ -29,7 +30,9 @@ namespace PackageVerifier
         [HelpOption]
         public string GetUsage()
         {
-            return HelpText.AutoBuild(this, (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+            return HelpText.AutoBuild(this, (HelpText current) => {
+                HelpText.DefaultParsingErrorsHandler(this, current);
+            });
         }
     }
 }

@@ -27,6 +27,7 @@ namespace PackageVerifier
 
             //tools
             For<ILogger>().Use<ConsoleLogger>().Singleton();
+            For<INugetService>().Use<NugetService>().Singleton();
 
             //scanners
             For<IScanner>().Use<FileScanner>().Named("file");

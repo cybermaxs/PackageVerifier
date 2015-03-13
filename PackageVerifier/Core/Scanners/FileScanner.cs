@@ -18,12 +18,11 @@ namespace PackageVerifier.Core.Scanners
 
         public  async Task ScanAsync()
         {
-            var watcher = Stopwatch.StartNew();
-            string[] files = Directory.GetFiles(this.settings.Home, "packages.config", SearchOption.AllDirectories);
-            watcher.Stop();
-            this.logger.Info("Scan in {0} ms", watcher.ElapsedMilliseconds.ToString());
+            var files = Directory.EnumerateFiles(this.settings.Home, "packages.config", SearchOption.AllDirectories);
             foreach(var file in files)
             {
+                if (!this.IsAllowed(file))
+                    continue;
                 var packages = await this.ParseConfig(File.Open(file, FileMode.Open, FileAccess.Read)).ConfigureAwait(false);
                 this.analytics.Hit(file, packages);
             }

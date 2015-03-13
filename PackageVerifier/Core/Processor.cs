@@ -20,11 +20,7 @@ namespace PackageVerifier.Core
         }
 
         public async Task Run()
-        {
-            this.logger.Verbose("Starting new session...");
-            this.logger.Verbose(this.scanner.GetType().Name);
-            this.logger.Verbose(this.reporter.GetType().Name);
-            
+        {           
             // run scanner
             await this.scanner.ScanAsync().ConfigureAwait(false);
 

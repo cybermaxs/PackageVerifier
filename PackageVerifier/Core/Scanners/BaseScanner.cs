@@ -48,5 +48,10 @@ namespace PackageVerifier.Core.Scanners
             
             return res;
         }
+
+        protected bool IsAllowed(string path)
+        {
+            return path.Contains(settings.Filter);
+        }
     }
 }
