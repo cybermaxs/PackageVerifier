@@ -6,24 +6,26 @@ Sample output for my https://github.com/filipw/AspNetWebApi-OutputCache local Re
 
 
 ```
->PackageVerifier.exe -h C:\_git\AspNetWebApi-OutputCache -s file -p Newtonsoft.Json
+
+>PackageVerifier.exe -h filipw/AspNetWebApi-OutputCache -s git -p Newtonsoft.Json
 
 **************************************
 Newtonsoft.Json - Last Version 6.0.8
 Summary :
 **************************************
 
-Scanned 7 packages.config at file=>C:\_git\AspNetWebApi-OutputCache
+Scanned 7 packages.config at git=>filipw/AspNetWebApi-OutputCache
 Found 2 versions of 'Newtonsoft.Json'
 
    =>Version 4.5.11
-      C:\_git\AspNetWebApi-OutputCache\sample\WebAPI.OutputCache.Demo\packages.config
-      C:\_git\AspNetWebApi-OutputCache\src\WebAPI.OutputCache\packages.config
-      C:\_git\AspNetWebApi-OutputCache\test\WebAPI.OutputCache.Tests\packages.config
-      C:\_git\AspNetWebApi-OutputCache\test\WebApi.OutputCache.V2.Tests\packages.config
+      sample/WebAPI.OutputCache.Demo/packages.config
+      src/WebAPI.OutputCache/packages.config
+      test/WebAPI.OutputCache.Tests/packages.config
+      test/WebApi.OutputCache.V2.Tests/packages.config
 
    =>Version 6.0.4
-      C:\_git\AspNetWebApi-OutputCache\sample\WebApi.OutputCache.V2.Demo\packages.config
-      C:\_git\AspNetWebApi-OutputCache\src\WebApi.OutputCache.V2\packages.config
+      sample/WebApi.OutputCache.V2.Demo/packages.config
+      src/WebApi.OutputCache.V2/packages.config
+
 ```
 
