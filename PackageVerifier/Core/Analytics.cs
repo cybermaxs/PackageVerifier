@@ -63,9 +63,9 @@ namespace PackageVerifier.Core
         public Dictionary<string, List<string>> GetStatsFor(string packageId)
         {
 
-            var vs = GetAllVersions(packageId);
+            var vs = GetAllVersions(packageId).OrderByDescending(k=>k);
 
-            var s = new Dictionary<string, List<string>>(vs.Count);
+            var s = new Dictionary<string, List<string>>(vs.Count());
             foreach (var v in vs)
             {
                 s.Add(v, new List<string>());
