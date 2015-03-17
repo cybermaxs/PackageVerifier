@@ -12,7 +12,6 @@ namespace PackageVerifier.Core
         private HashSet<string> Paths = new HashSet<string>();
         private Dictionary<string, HashSet<string>> PackagesVersions = new Dictionary<string, HashSet<string>>();
 
-
         public void Hit(string path, List<Package> packages)
         {
             if (packages != null)

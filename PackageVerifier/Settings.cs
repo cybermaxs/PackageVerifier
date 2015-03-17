@@ -14,7 +14,7 @@ namespace PackageVerifier
         [Option('h', "Home", Required = true, DefaultValue = "", HelpText = "Root path")]
         public string Home { get; set; }
 
-        [Option('p', "packageID", Required = true, DefaultValue = "", HelpText = "Package Id")]
+        [Option('p', "packageID", Required = false, DefaultValue = "", HelpText = "Package Id")]
         public string PackageID { get; set; }
 
         [Option('r', "reporter", Required = false, DefaultValue = "console", HelpText = "Reporter Type : console|html")]

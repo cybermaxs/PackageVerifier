@@ -1,5 +1,6 @@
 ﻿using PackageVerifier.Utils;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PackageVerifier.Core.Reporters
@@ -24,6 +25,18 @@ namespace PackageVerifier.Core.Reporters
 
         public Task GenerateAsync()
         {
+            Console.WriteLine("Scanned {0} packages.config at {1} => {2}", this.analytics.GetAllPaths().Count, settings.Source, settings.Home);
+
+            if (!string.IsNullOrEmpty(this.settings.PackageID))
+                this.GeneratePackageStats();
+            else
+                this.GenerateSummary();
+
+            return Task.FromResult<object>(null);
+        }
+
+        private Task GeneratePackageStats()
+        {
             var pkg = this.nugetService.GetPackageInfos(settings.PackageID);
             if (pkg == null)
             {
@@ -39,17 +52,25 @@ namespace PackageVerifier.Core.Reporters
                 Console.WriteLine();
             }
 
-            Console.WriteLine("Scanned {0} packages.config at {1} => {2}", this.analytics.GetAllPaths().Count, settings.Source, settings.Home);
-
             Console.WriteLine("Found {0} versions of '{1}'", this.analytics.GetAllVersions(settings.PackageID).Count, settings.PackageID);
             foreach (var stats in this.analytics.GetStatsFor(settings.PackageID))
             {
                 Console.WriteLine();
-                Console.WriteLine(Indent(1)+@" => Version {0}", stats.Key);
+                Console.WriteLine(Indent(1) + @" => Version {0}", stats.Key);
                 foreach (var path in stats.Value)
                 {
                     Console.WriteLine(Indent(2) + @"{0}", path);
-                } 
+                }
+            }
+            return Task.FromResult<object>(null);
+        }
+
+        private Task GenerateSummary()
+        {
+            foreach (var pkgId in this.analytics.GetAllPackagesIds())
+            {
+                var vs = this.analytics.GetAllVersions(pkgId).OrderBy(k=>k);
+                Console.WriteLine("Package '{0}' has {1} version(s) ({2})", pkgId, vs.Count(), string.Join(", ", vs));
             }
 
             return Task.FromResult<object>(null);
