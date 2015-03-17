@@ -2,7 +2,7 @@
 Command line tool that lists all versions of nuget pacakges in TFS or file system to avoid obsolete dependencies.
 A mismatch between packages version into your projects, branches, ... is very common and can lead to several weird situations
 
-Sample output for my https://github.com/filipw/AspNetWebApi-OutputCache local Repo for package Newtonsoft.Json
+Sample output for https://github.com/filipw/AspNetWebApi-OutputCache and package 'Newtonsoft.Json'
 
 
 ```
