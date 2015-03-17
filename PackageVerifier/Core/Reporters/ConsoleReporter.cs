@@ -1,6 +1,5 @@
 ﻿using PackageVerifier.Utils;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PackageVerifier.Core.Reporters

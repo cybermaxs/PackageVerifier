@@ -1,7 +1,7 @@
 ﻿using PackageVerifier.Core.Reporters;
 using PackageVerifier.Core.Scanners;
 using PackageVerifier.Utils;
-using StructureMap;
+using System;
 using System.Threading.Tasks;
 
 namespace PackageVerifier.Core
@@ -20,12 +20,19 @@ namespace PackageVerifier.Core
         }
 
         public async Task Run()
-        {           
-            // run scanner
-            await this.scanner.ScanAsync().ConfigureAwait(false);
+        {
+            try
+            {
+                // run scanner
+                await this.scanner.ScanAsync().ConfigureAwait(false);
 
-            // run reporter
-            await this.reporter.GenerateAsync().ConfigureAwait(false);
+                // run reporter
+                await this.reporter.GenerateAsync().ConfigureAwait(false);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("ERROR => "+ex.Message);
+            }
         }
     }
 }

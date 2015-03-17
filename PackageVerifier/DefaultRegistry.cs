@@ -32,6 +32,7 @@ namespace PackageVerifier
             //scanners
             For<IScanner>().Use<FileScanner>().Named("file");
             For<IScanner>().Use<TfsScanner>().Named("tfs");
+            For<IScanner>().Use<GitScanner>().Named("git");
 
             //reporters
             For<IReporter>().Use<ConsoleReporter>().Named("console");
@@ -46,7 +47,7 @@ namespace PackageVerifier
             For<IReporter>().Use("reporterFactory", e =>
             {
                 var settings = e.GetInstance<Settings>();
-                return e.GetInstance<IReporter>(settings.Reporters.ToLowerInvariant());
+                return e.GetInstance<IReporter>(settings.Reporter.ToLowerInvariant());
             });
         }
     }

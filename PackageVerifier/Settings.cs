@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using System.Linq;
 using CommandLine.Text;
 
 namespace PackageVerifier
@@ -19,10 +18,15 @@ namespace PackageVerifier
         public string PackageID { get; set; }
 
         [Option('r', "reporter", Required = false, DefaultValue = "console", HelpText = "Reporter Type : console|html")]
-        public string Reporters { get; set; }
+        public string Reporter { get; set; }
 
-        [Option('s', "source", Required = true, DefaultValue = "file", HelpText = "Source Type : file|tfs")]
+        [Option('s', "source", Required = true, DefaultValue = "file", HelpText = "Source Type : file|tfs|git")]
         public string Source { get; set; }
+
+        [Option('u', "user", Required = false, DefaultValue = "", HelpText = "Git User Name")]
+        public string UserName { get; set; }
+        [Option('a', "password", Required = false, DefaultValue = "", HelpText = "Git Password")]
+        public string Password { get; set; }
 
         [ParserState]
         public IParserState LastParserState { get; set; }

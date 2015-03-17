@@ -1,8 +1,8 @@
 ﻿using CommandLine;
 using PackageVerifier.Core;
 using System;
-using System.Linq;
 using System.Diagnostics;
+using System.Linq;
 
 namespace PackageVerifier
 {
@@ -13,8 +13,6 @@ namespace PackageVerifier
             var settings = new Settings();
             if (Parser.Default.ParseArguments(args, settings) && PostValidate(settings))
             {
-                //post validate
-
                 var container = Ioc.Initialize();
                 container.Inject(settings);
                 var processor = container.GetInstance<Processor>();
@@ -29,15 +27,15 @@ namespace PackageVerifier
 
         static bool PostValidate(Settings settings)
         {
-            if (!new string[] { "file", "tfs" }.Contains(settings.Source))
+            if (!new string[] { "file", "tfs", "git" }.Contains(settings.Source))
             {
                 Console.Write("Source '{0}' is not supported", settings.Source);
                 return false;
             }
 
-            if (!new string[] { "console", "html" }.Contains(settings.Reporters))
+            if (!new string[] { "console", "html" }.Contains(settings.Reporter))
             {
-                Console.Write("Reporter '{0}' is not supported", settings.Reporters);
+                Console.Write("Reporter '{0}' is not supported", settings.Reporter);
                 return false;
             }
             return true;

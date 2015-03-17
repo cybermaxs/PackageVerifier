@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace PackageVerifier.Core
 {
     interface IAnalytics
     {
         void Hit(string path, List<Models.Package> packages);
-        List<string> GetAllPackagesIds();
-        List<string> GetAllVersions(string packageId);
-        List<string> GetAllPaths();
+        HashSet<string> GetAllPackagesIds();
+        HashSet<string> GetAllVersions(string packageId);
+        HashSet<string> GetAllPaths();
         Dictionary<string, List<string>> GetStatsFor(string packageId);
     }
 }

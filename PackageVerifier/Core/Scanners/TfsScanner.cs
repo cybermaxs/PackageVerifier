@@ -2,11 +2,8 @@
 using Microsoft.TeamFoundation.Framework.Client;
 using Microsoft.TeamFoundation.Framework.Common;
 using Microsoft.TeamFoundation.VersionControl.Client;
-using PackageVerifier.Core;
-using PackageVerifier.Models;
 using PackageVerifier.Utils;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -23,6 +20,8 @@ namespace PackageVerifier.Core.Scanners
         public async Task ScanAsync()
         {
             Uri tfsUri = new Uri(this.settings.Home);
+
+            var tfsCreds = new TfsClientCredentials(new WindowsCredential(), true);
 
             TfsConfigurationServer configurationServer = TfsConfigurationServerFactory.GetConfigurationServer(tfsUri);
 

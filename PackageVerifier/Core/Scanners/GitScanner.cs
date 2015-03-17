@@ -1,14 +1,7 @@
-﻿using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Framework.Client;
-using Microsoft.TeamFoundation.Framework.Common;
-using Microsoft.TeamFoundation.VersionControl.Client;
-using Octokit;
-using PackageVerifier.Core;
-using PackageVerifier.Models;
+﻿using Octokit;
 using PackageVerifier.Utils;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace PackageVerifier.Core.Scanners
@@ -23,14 +16,27 @@ namespace PackageVerifier.Core.Scanners
 
         public async Task ScanAsync()
         {
-            Uri githubUri = new Uri(this.settings.Home);
-
             // TODO
-            //var github = new GitHubClient(new ProductHeaderValue("PackageVerifier"));
-            //github.Search.SearchCode(new SearchCodeRequest())
-            //var user = await github.User.Get("half-ogre");
-            //Console.WriteLine(user.Followers + " folks love the half ogre!");
+            var github = new GitHubClient(new ProductHeaderValue("PackageVerifier"));
+            if (!string.IsNullOrEmpty(settings.UserName) && !string.IsNullOrEmpty(settings.Password))
+                github.Credentials = new Credentials(settings.UserName, settings.Password); 
+            
+            var codeSearch = new SearchCodeRequest("packages.config")
+	        {  
+		        Repo = this.settings.Home, 
+		        In = new[] {CodeInQualifier.Path}
+	        };
 
+            var codeResult = await github.Search.SearchCode(codeSearch).ConfigureAwait(false);
+
+            foreach(var item in codeResult.Items)
+            {
+                var blob = await github.GitDatabase.Blob.Get(item.Repository.Owner.Login, item.Repository.Name,item.Sha).ConfigureAwait(false);
+                MemoryStream stream=new MemoryStream(Convert.FromBase64String(blob.Content));
+                var packages = await this.ParseConfig(stream).ConfigureAwait(false);
+                this.analytics.Hit(item.Path, packages);
+            }
+         
         }
     }
 }
