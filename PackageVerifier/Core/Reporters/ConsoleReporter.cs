@@ -1,4 +1,5 @@
-﻿using PackageVerifier.Utils;
+﻿using NuGet;
+using PackageVerifier.Utils;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,7 +60,7 @@ namespace PackageVerifier.Core.Reporters
                 Console.WriteLine(Indent(1) + @" => Version {0}", stats.Key);
                 foreach (var path in stats.Value)
                 {
-                    Console.WriteLine(Indent(2) + @"{0}", path);
+                    Console.WriteLine(Indent(4) + @"{0}", path);
                 }
             }
             return Task.FromResult<object>(null);
@@ -71,12 +72,14 @@ namespace PackageVerifier.Core.Reporters
             {
                 var pkg = this.nugetService.GetPackageInfos(pkgId);
                 var vs = this.analytics.GetAllVersions(pkgId).OrderBy(k => k);
-                string status = string.Empty;
+                string status = "UNKNOW";
                 if (pkg != null)
-                    if (vs.Contains(pkg.Version.ToString()))
+                {
+                    if (vs.Where(s=> new SemanticVersion(s)>=pkg.Version).Count()>0)
                         status = "LATEST";
                     else
-                        status = string.Format("OUTDATED (Current {0})", pkg.Version);
+                        status = string.Format("OUTDATED (Current stable {0})", pkg.Version);
+                }
                 Console.WriteLine("{3} - Package '{0}' has {1} version(s) ({2})", pkgId, vs.Count(), string.Join(", ", vs), status);
             }
 
