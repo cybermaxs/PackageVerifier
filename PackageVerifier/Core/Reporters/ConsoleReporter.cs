@@ -69,8 +69,15 @@ namespace PackageVerifier.Core.Reporters
         {
             foreach (var pkgId in this.analytics.GetAllPackagesIds())
             {
-                var vs = this.analytics.GetAllVersions(pkgId).OrderBy(k=>k);
-                Console.WriteLine("Package '{0}' has {1} version(s) ({2})", pkgId, vs.Count(), string.Join(", ", vs));
+                var pkg = this.nugetService.GetPackageInfos(pkgId);
+                var vs = this.analytics.GetAllVersions(pkgId).OrderBy(k => k);
+                string status = string.Empty;
+                if (pkg != null)
+                    if (vs.Contains(pkg.Version.ToString()))
+                        status = "LATEST";
+                    else
+                        status = string.Format("OUTDATED (Current {0})", pkg.Version);
+                Console.WriteLine("{3} - Package '{0}' has {1} version(s) ({2})", pkgId, vs.Count(), string.Join(", ", vs), status);
             }
 
             return Task.FromResult<object>(null);
