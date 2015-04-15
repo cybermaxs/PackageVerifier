@@ -49,10 +49,17 @@ namespace PackageVerifier.Core.Scanners
                         if (!this.IsAllowed(item.ServerItem))
                             continue;
 
-                        var stream = item.DownloadFile();
-                        var packages = await this.ParseConfig(stream).ConfigureAwait(false);
+                        try
+                        {
+                            var stream = item.DownloadFile();
+                            var packages = await this.ParseConfig(stream).ConfigureAwait(false);
 
-                        this.analytics.Hit(item.ServerItem, packages);
+                            this.analytics.Hit(item.ServerItem, packages);
+                        }
+                        catch(Exception ex)
+                        {
+                            this.logger.Error("Could not downloadfile {0}=> {1}", item.ServerItem, ex.Message);
+                        }
                     }
                 }
             }

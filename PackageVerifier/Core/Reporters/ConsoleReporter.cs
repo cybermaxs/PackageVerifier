@@ -75,7 +75,14 @@ namespace PackageVerifier.Core.Reporters
                 string status = "UNKNOW";
                 if (pkg != null)
                 {
-                    if (vs.Where(s=> new SemanticVersion(s)>=pkg.Version).Count()>0)
+                    if (vs.Where(s =>
+                    {
+                        SemanticVersion ver = null;
+                        if (SemanticVersion.TryParse(s, out ver) && ver != null)
+                            return ver >= pkg.Version;
+                        else
+                            return false;
+                    }).Count() > 0)
                         status = "LATEST";
                     else
                         status = string.Format("OUTDATED (Current stable {0})", pkg.Version);
