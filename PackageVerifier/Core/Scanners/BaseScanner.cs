@@ -51,6 +51,9 @@ namespace PackageVerifier.Core.Scanners
 
         protected bool IsAllowed(string path)
         {
+            if (string.IsNullOrEmpty(settings.Filter))
+                return true;
+
             return path.Contains(settings.Filter);
         }
     }
