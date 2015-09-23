@@ -22,8 +22,8 @@ namespace PackageVerifier.Core.Scanners
                 github.Credentials = new Credentials(settings.UserName, settings.Password); 
             
             var codeSearch = new SearchCodeRequest("packages.config")
-	        {  
-		        Repo = this.settings.Home, 
+	        {    
+		        Path = this.settings.Home, 
 		        In = new[] {CodeInQualifier.Path}
 	        };
 
